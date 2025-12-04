@@ -3313,30 +3313,36 @@ async def video_downloader(_, message: Message):
 
 
 from pyrogram import filters
-from pyrogram.types import Message, InlineKeyboardMarkup, InlineKeyboardButton, InputMediaVideo
+from pyrogram.types import Message, InlineKeyboardMarkup, InlineKeyboardButton
 from ShrutiMusic import app
 
-REPO_VIDEO = "https://files.catbox.moe/aoafwn.mp4"
+REPO_VIDEO = "https://files.catbox.moe/6eivr1.mp4"
 
 @app.on_message(filters.command(["repo", "source"]))
 async def send_repo(_, message: Message):
     await message.reply_video(
         video=REPO_VIDEO,
         caption=(
-            "<b>✨ ʜᴇʏ ᴅᴇᴀʀ, ʜᴇʀᴇ ɪꜱ ᴛʜᴇ ᴏꜰꜰɪᴄɪᴀʟ ʀᴇᴘᴏꜱɪᴛᴏʀʏ �ᴏꜰ ᴛʜɪꜱ ʙᴏᴛ ✨</b>\n\n"
-            "🔗 �ᴏɴ'ᴛ ꜰᴏʀɢᴇᴛ ᴛᴏ ɢɪᴠᴇ ᴀ ꜱᴛᴀʀ 🌟 ᴀɴᴅ ꜰᴏʟʟᴏᴡ!\n\n"
-            "🧡 ᴄʀᴇᴅɪᴛꜱ : <a href='https://t.me/ShrutiBots'>@ShrutiBots</a>"
+            "✪ ᴡᴇʟᴄᴏᴍᴇ ᴛᴏ ˹ ғʟᴇxʏʏ ᴍᴜsɪᴄ ˼ ʙᴏᴛ ✪\n\n"
+            "❍ • ʀᴇᴘᴏ ᴄʜᴀʜɪʏᴇ ʙᴇᴛᴀ?\n"
+            "      ᴘᴇʜʟᴇ “ғʟᴇxʏʏ ᴋᴏ ᴘᴀᴘᴀ ʙᴏʟ” •\n\n"
+            "❍ • ʙsᴅᴋ ʀᴇᴘᴏ ʙᴀᴀᴅ ᴍᴇ ᴍɪʟᴇɢᴀ,\n"
+            "      ᴘᴇʜʟᴇ ғʟᴇxʏʏ ᴋᴏ ᴘᴀᴘᴀ ʙᴏʟ ᴋᴇ ᴀᴀ •\n\n"
+            "❍ • ᴄʜᴜᴘ ᴄʜᴀᴘ ʙᴏʟ —\n"
+            "      “ғʟᴇxʏʏ ᴋᴏ ᴘᴀᴘᴀ”\n"
+            "      ғɪʀ ʙᴏᴛ ʟᴇ ᴋᴇ ɴɪᴋᴀʟ •\n\n"
+            "❍ • ʀᴇᴘᴏ ʙɪɴᴀ ʀᴜʟᴇ ɴᴀʜɪ ᴛᴏᴏᴛᴇɢᴀ,\n"
+            "      ᴘᴇʜʟᴇ ғʟᴇxʏʏ ᴋᴏ ᴘᴀᴘᴀ ʙᴏʟ — ғɪʀ ʙᴀᴀᴛ ʜᴏɢɪ •"
         ),
         reply_markup=InlineKeyboardMarkup(
             [
                 [
-                    InlineKeyboardButton("📂 Management Bot", url="http://github.com/NoxxOP/ShrutiMusic"),
-                    InlineKeyboardButton("📂 Music Bot", url="http://github.com/NoxxOP/ShrutixMusic")
+                    InlineKeyboardButton("𝐆 𝐇 𝐎 𝐒 𝐓 !!", url="https://t.me/xFlexyy")
                 ]
             ]
         ),
         supports_streaming=True,
-        has_spoiler=True,
+        has_spoiler=False,  # preview play ON
     )
 
 
