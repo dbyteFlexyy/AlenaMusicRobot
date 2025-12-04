@@ -79,20 +79,21 @@ async def show_help_page1(client, callback_query: CallbackQuery):
 async def fork_repo_callback(client, query):
     await query.message.edit_text(
         text=(
-            "✨ <b>ʙᴜɪʟᴅ Yᴏᴜʀ Oᴡɴ ᴍᴜsɪᴄ ʙᴏᴛ 🎧</b>\n\n"
-            "🚀 ʀᴇᴀᴅʏ ᴛᴏ ʟᴀᴜɴᴄʜ ʏᴏᴜʀ ᴏᴡɴ ʙᴏᴛ?\n"
-            "ғᴏʀᴋ ᴛʜᴇ ʀᴇᴘᴏ ᴀɴᴅ ᴅᴇᴘʟᴏʏ ɪɴ sᴇᴄᴏɴᴅs.\n\n"
-            "🔧 <b>Cᴜsᴛᴏᴍɪᴢᴇ ɪᴛ. Dᴇᴘʟᴏʏ ɪᴛ. Vɪʙᴇ ᴡɪᴛʜ ɪᴛ 🔥</b>"
+            "✨ <b>ᴡᴇʟᴄᴏᴍᴇ ᴛᴏ ᴏᴜʀ ᴀɴɪᴍᴇ ᴡᴏʀʟᴅ 🌸</b>\n\n"
+            "🚀 ᴀɴɪᴍᴇ ʟᴏᴠᴇʀs ᴄᴏɴɴᴇᴄᴛ ʜᴇʀᴇ!\n"
+            "ʜɪɴᴅɪ + ᴀɴɪᴍᴇ ᴍɪx ᴠɪʙᴇs, ᴍᴇᴍᴇs, ᴇᴅɪᴛs ᴀɴᴅ ᴍᴏʀᴇ.\n\n"
+            "🎭 <b>ᴀɴɪᴍᴇ ᴘғᴘ • ᴄʜᴀʀᴀᴄᴛᴇʀs • ᴀᴇsᴛʜᴇᴛɪᴄs 🔥</b>\n"
+            "🌟 ᴅᴀɪʟʏ ᴘғᴘ ᴜᴘᴅᴀᴛᴇs & ᴜʟᴛʀᴀ ʜᴅ ᴘɪᴄs!"
         ),
         disable_web_page_preview=True,
         reply_markup=InlineKeyboardMarkup(
             [
                 [
-                    InlineKeyboardButton("🚀 Fᴏʀᴋ Rᴇᴘᴏ", url="https://github.com/NoxxOP/ShrutiMusic/fork"),
-                    InlineKeyboardButton("⚡ Hᴇʀᴏᴋᴜ Dᴇᴘʟᴏʏ", url="https://dashboard.heroku.com/new?template=https://github.com/NoxxOP/ShrutiMusic")
+                    InlineKeyboardButton("ᴀɴɪᴍᴇ's ᴄʜᴀɴɴᴇʟ", url="https://t.me/+W9SUXsl7C-Y2MGUx"),
+                    InlineKeyboardButton("ᴀɴɪᴍᴇ ᴘғᴘ ʜᴜʙ", url="https://t.me/Skippy_dippy")
                 ],
                 [
-                    InlineKeyboardButton("🔙 Bᴀᴄᴋ", callback_data="settingsback_helper")
+                    InlineKeyboardButton("ʙᴀᴄᴋ", callback_data="settingsback_helper")
                 ]
             ]
         )
