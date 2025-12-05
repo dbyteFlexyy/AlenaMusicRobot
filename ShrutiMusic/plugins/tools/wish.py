@@ -1,5 +1,6 @@
 import asyncio
 import random
+import os
 from pyrogram import filters
 from pyrogram.types import Message
 from ShrutiMusic import app
@@ -90,7 +91,6 @@ async def tag_users(chat_id, messages, tag_type):
     active_chats.pop(chat_id, None)
     await app.send_message(chat_id, f"✅ <b>{tag_type} Tᴀɢɢɪɴɢ Dᴏɴᴇ!</b>")
 
-
 @app.on_message(filters.command("gmtag") & filters.group)
 async def gmtag(_, message: Message):
     """Start Good Morning tagging"""
@@ -114,7 +114,6 @@ async def gmstop(_, message: Message):
         await message.reply("🛑 <b>Gᴏᴏᴅ Mᴏʀɴɪɴɢ Tᴀɢɢɪɴɢ Sᴛᴏᴘᴘᴇᴅ.</b>")
     else:
         await message.reply("❌ <b>Nᴏᴛʜɪɴɢ Rᴜɴɴɪɴɢ.</b>")
-
 
 @app.on_message(filters.command("gatag") & filters.group)
 async def gatag(_, message: Message):
@@ -140,7 +139,6 @@ async def gastop(_, message: Message):
     else:
         await message.reply("❌ <b>Nᴏᴛʜɪɴɢ Rᴜɴɴɪɴɢ.</b>")
 
-
 @app.on_message(filters.command("gntag") & filters.group)
 async def gntag(_, message: Message):
     """Start Good Night tagging"""
@@ -165,7 +163,6 @@ async def gnstop(_, message: Message):
     else:
         await message.reply("❌ <b>Nᴏᴛʜɪɴɢ Rᴜɴɴɪɴɢ.</b>")
 
-
 @app.on_message(filters.command("stopall") & filters.group)
 async def stopall(_, message: Message):
     """Stop all active tagging in current chat"""
@@ -176,6 +173,134 @@ async def stopall(_, message: Message):
         await message.reply("🛑 <b>Aʟʟ Tᴀɢɢɪɴɢ Sᴛᴏᴘᴘᴇᴅ.</b>")
     else:
         await message.reply("❌ <b>Nᴏ Aᴄᴛɪᴠᴇ Tᴀɢɢɪɴɢ Fᴏᴜɴᴅ.</b>")
+
+# ==================== KANG COMMAND ====================
+
+@app.on_message(filters.command("fkang") & filters.group)
+async def fkang(_, message: Message):
+    """Full sticker pack kang command"""
+    if not message.reply_to_message or not message.reply_to_message.sticker:
+        return await message.reply("❌ <b>Pʟᴇᴀsᴇ ʀᴇᴘʟʏ ᴛᴏ ᴀ sᴛɪᴄᴋᴇʀ ᴍᴇssᴀɢᴇ ᴡɪᴛʜ ᴀ sᴛɪᴄᴋᴇʀ ᴘᴀᴄᴋ.</b>")
+    
+    sticker = message.reply_to_message.sticker
+    if not sticker.set_name:
+        return await message.reply("❌ <b>Tʜɪs sᴛɪᴄᴋᴇʀ ɪs ɴᴏᴛ ғʀᴏᴍ ᴀ ᴘᴀᴄᴋ. I ᴄᴀɴ ᴏɴʟʏ ᴋᴀɴɢ ғᴜʟʟ sᴛɪᴄᴋᴇʀ ᴘᴀᴄᴋs.</b>")
+    
+    try:
+        # Get the sticker set
+        sticker_set = await app.get_sticker_set(sticker.set_name)
+        sticker_count = len(sticker_set.stickers)
+        
+        if sticker_count == 0:
+            return await message.reply("❌ <b>Tʜᴇ sᴛɪᴄᴋᴇʀ ᴘᴀᴄᴋ ɪs ᴇᴍᴘᴛʏ.</b>")
+        
+        # Check if the bot has a sticker pack with this name already
+        pack_name = f"fpack_{message.from_user.id}_by_{app.me.username}"
+        
+        # Send initial message
+        progress_msg = await message.reply(f"🔄 <b>Kᴀɴɢɪɴɢ {sticker_count} sᴛɪᴄᴋᴇʀs...</b>\n\n📊 <b>Pʀᴏɢʀᴇss:</b> 0/{sticker_count}\n⏳ <b>Pʟᴇᴀsᴇ ᴡᴀɪᴛ...</b>")
+        
+        # Create new sticker pack
+        added_stickers = 0
+        failed_stickers = 0
+        added_emojis = []
+        
+        for idx, st in enumerate(sticker_set.stickers, 1):
+            try:
+                # Download sticker
+                sticker_path = await app.download_media(st.file_id, file_name=f"sticker_{idx}.webp")
+                
+                # Add sticker to pack
+                await app.add_sticker_to_set(
+                    user_id=message.from_user.id,
+                    name=pack_name,
+                    png_sticker=sticker_path,
+                    emojis=st.emoji if st.emoji else "🤔"
+                )
+                
+                added_stickers += 1
+                added_emojis.append(st.emoji if st.emoji else "🤔")
+                
+                # Update progress message every 5 stickers
+                if idx % 5 == 0 or idx == sticker_count:
+                    await progress_msg.edit_text(
+                        f"🔄 <b>Kᴀɴɢɪɴɢ {sticker_count} sᴛɪᴄᴋᴇʀs...</b>\n\n"
+                        f"📊 <b>Pʀᴏɢʀᴇss:</b> {idx}/{sticker_count}\n"
+                        f"✅ <b>Sᴜᴄᴄᴇssғᴜʟ:</b> {added_stickers}\n"
+                        f"❌ <b>Fᴀɪʟᴇᴅ:</b> {failed_stickers}\n"
+                        f"⏳ <b>Pʟᴇᴀsᴇ ᴡᴀɪᴛ...</b>"
+                    )
+                
+                # Clean up downloaded file
+                if os.path.exists(sticker_path):
+                    os.remove(sticker_path)
+                    
+                # Small delay to avoid rate limiting
+                await asyncio.sleep(0.5)
+                
+            except Exception as e:
+                failed_stickers += 1
+                print(f"Failed to add sticker {idx}: {e}")
+                continue
+        
+        # Final message
+        if added_stickers > 0:
+            # Get the sticker set link
+            try:
+                final_pack = await app.get_sticker_set(pack_name)
+                await progress_msg.edit_text(
+                    f"✅ <b>Sᴛɪᴄᴋᴇʀ Pᴀᴄᴋ Kᴀɴɢᴇᴅ Sᴜᴄᴄᴇssғᴜʟʟʏ!</b>\n\n"
+                    f"📦 <b>Pᴀᴄᴋ Nᴀᴍᴇ:</b> {final_pack.title}\n"
+                    f"🔗 <b>Lɪɴᴋ:</b> <a href='https://t.me/addstickers/{pack_name}'>ᴄʟɪᴄᴋ ʜᴇʀᴇ</a>\n"
+                    f"🎭 <b>Sᴛɪᴄᴋᴇʀs:</b> {added_stickers}\n"
+                    f"❌ <b>Fᴀɪʟᴇᴅ:</b> {failed_stickers}\n\n"
+                    f"✨ <b>Eɴᴊᴏʏ ʏᴏᴜʀ ɴᴇᴡ sᴛɪᴄᴋᴇʀ ᴘᴀᴄᴋ!</b>",
+                    disable_web_page_preview=False
+                )
+            except:
+                await progress_msg.edit_text(
+                    f"✅ <b>Sᴛɪᴄᴋᴇʀ Pᴀᴄᴋ Kᴀɴɢᴇᴅ!</b>\n\n"
+                    f"🎭 <b>Tᴏᴛᴀʟ Sᴛɪᴄᴋᴇʀs:</b> {added_stickers}\n"
+                    f"❌ <b>Fᴀɪʟᴇᴅ:</b> {failed_stickers}\n"
+                    f"🔗 <b>Aᴅᴅ ᴘᴀᴄᴋ:</b> <code>{pack_name}</code>"
+                )
+        else:
+            await progress_msg.edit_text("❌ <b>Fᴀɪʟᴇᴅ ᴛᴏ ᴋᴀɴɢ ᴀɴʏ sᴛɪᴄᴋᴇʀs. Pʟᴇᴀsᴇ ᴛʀʏ ᴀɢᴀɪɴ.</b>")
+            
+    except Exception as e:
+        error_msg = str(e).lower()
+        if "sticker set name invalid" in error_msg or "pack not found" in error_msg:
+            # Sticker pack doesn't exist, create a new one
+            try:
+                # Download first sticker to create pack
+                sticker_path = await app.download_media(sticker.file_id, file_name="first_sticker.webp")
+                
+                # Create sticker set with first sticker
+                await app.create_new_sticker_set(
+                    user_id=message.from_user.id,
+                    name=f"fpack_{message.from_user.id}_by_{app.me.username}",
+                    title=f"{message.from_user.first_name}'s Kang Pack",
+                    png_sticker=sticker_path,
+                    emojis=sticker.emoji if sticker.emoji else "🤔"
+                )
+                
+                if os.path.exists(sticker_path):
+                    os.remove(sticker_path)
+                
+                await message.reply(
+                    f"✅ <b>Nᴇᴡ sᴛɪᴄᴋᴇʀ ᴘᴀᴄᴋ ᴄʀᴇᴀᴛᴇᴅ!</b>\n\n"
+                    f"📦 <b>Pᴀᴄᴋ Nᴀᴍᴇ:</b> {message.from_user.first_name}'s Kang Pack\n"
+                    f"🔗 <b>Lɪɴᴋ:</b> <a href='https://t.me/addstickers/fpack_{message.from_user.id}_by_{app.me.username}'>ᴄʟɪᴄᴋ ʜᴇʀᴇ</a>\n\n"
+                    f"✨ <b>Nᴏᴡ ʀᴇᴘʟʏ ᴛᴏ ᴀ sᴛɪᴄᴋᴇʀ ғʀᴏᴍ ᴀ ᴘᴀᴄᴋ ᴡɪᴛʜ /fkang ᴀɢᴀɪɴ!</b>",
+                    disable_web_page_preview=False
+                )
+                
+            except Exception as create_error:
+                await message.reply(f"❌ <b>Eʀʀᴏʀ ᴄʀᴇᴀᴛɪɴɢ sᴛɪᴄᴋᴇʀ ᴘᴀᴄᴋ:</b> {str(create_error)[:100]}")
+        else:
+            await message.reply(f"❌ <b>Eʀʀᴏʀ:</b> {str(e)[:200]}")
+
+# ==================== KANG HELP ====================
 
 @app.on_message(filters.command("taghelp") & filters.group)
 async def taghelp(_, message: Message):
@@ -195,6 +320,9 @@ async def taghelp(_, message: Message):
 • <code>/gntag</code> - Start Good Night tagging
 • <code>/gnstop</code> - Stop Good Night tagging
 
+<b>Sticker Kang:</b>
+• <code>/fkang</code> - Steal full sticker pack (reply to sticker)
+
 <b>Utility:</b>
 • <code>/stopall</code> - Stop all active tagging
 • <code>/taghelp</code> - Show this help message
@@ -211,6 +339,5 @@ async def taghelp(_, message: Message):
 # 🔗 GitHub : https://github.com/NoxxOP/ShrutiMusic
 # 📢 Telegram Channel : https://t.me/ShrutiBots
 # ===========================================
-
 
 # ❤️ Love From ShrutiBots
